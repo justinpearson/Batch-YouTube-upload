@@ -114,10 +114,10 @@ The file `upload_video-many.py` is mostly the same as `upload_video.py`, except 
 
 Each line represents a video that may or may not be uploaded. 
 
-- The program `seminar-csv-parse.py` is a test program that reads through the CSV file and makes a Title and Description for each line. I pasted its code into `upload_video-many.py` afterward.
-- If 'Video URL' is present, the line is skipped (presumably the video has been already uploaded during a previous run).
+- The program `seminar-csv-parse.py` is a test program that reads through the CSV file and makes a Title and Description for each line. Consider running this first to test your  CSV file then paste it into `upload_video-many.py` afterward.
+- If a line's Video URL' is present, the line is skipped (presumably the video has been already uploaded during a previous run).
   - See the code for other conditions that skip the line, you'll probably want to modify it for your own application.
-- The 'Talk Video' field is the name of the video. Its absolute path is hard-coded in the code, you'll need to change this line:
+- The 'Talk Video' field is the video's filename (.mp4 etc). Its absolute path is hard-coded in the code, so you'll need to change this line:
   - `absfile = os.path.join('/media/justin/ccdc_vid_backup/videos_seminars/',file)`
 
 
