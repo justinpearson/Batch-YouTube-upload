@@ -36,8 +36,8 @@ upload every half hour waiting for the quota to reset.
 - The API of interest is the YouTube Data API:
   - <https://console.developers.google.com/apis/api/youtube.googleapis.com/overview>
 - These APIs are intended for app developers to write apps that users use to interact with their Google Accounts. Consequently, the system that Google uses to manage credentials is complicated. 
-- To use the YouTube API, you need to have a Google account, then make a Project in the Developer Console, then get credentials, 
-- OAuth 2.0 credentials vs API keys
+- To use the YouTube API, you need to have a Google account, then make a Project in the Developer Console, then get credentials (a Client ID and Client Secret).
+- Credential types: OAuth 2.0 credentials vs API keys
   - Using an API key: To use this API you need an API key. An API key identifies your project to check quotas and access. Go to the Credentials page to get an API key. You’ll need a key for each platform, such as Web, Android, and iOS. 
   - Accessing user data with OAuth 2.0: You can access user data with this API. On the Credentials page, create an OAuth 2.0 client ID. A client ID requests user consent so that your app can access user data. Include that client ID when making your API call to Google.
   - Because we're trying to access private user data (private videos), we need OAuth 2.0 credentials.
@@ -48,9 +48,9 @@ upload every half hour waiting for the quota to reset.
 Following the YouTube Data API tutorial "Upload a Video" (<https://developers.google.com/youtube/v3/guides/uploading_a_video>),
 
 - Use Python 2.5 or higher
-- Install Google APIs client library for Python ([more](https://developers.google.com/api-client-library/python/start/installation
-)):
-        $ pip install --upgrade google-api-python-client
+- Install Google APIs client library for Python:
+  - `$ pip install --upgrade google-api-python-client`
+  - <https://developers.google.com/api-client-library/python/start/installation>
 
 - Create a Google Account if you don't have one (or make a temporary one)
   - TIP: If using a different Google account than your normal one, do all this in "private" or "incognito" browser windows to avoid getting logged-out of your normal gmail etc.
@@ -62,15 +62,15 @@ Following the YouTube Data API tutorial "Upload a Video" (<https://developers.go
   - <https://developers.google.com/youtube/registering_an_application>
   - This results in you getting a 'client id' and 'client secret', which you should put in a file `client_secrets.json` like this:
 
-          {
-            "web": {
-              "client_id": "[[INSERT CLIENT ID HERE]]",
-              "client_secret": "[[INSERT CLIENT SECRET HERE]]",
-              "redirect_uris": [],
-              "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-              "token_uri": "https://accounts.google.com/o/oauth2/token"
-            }
-          }
+      {
+        "web": {
+          "client_id": "[[INSERT CLIENT ID HERE]]",
+          "client_secret": "[[INSERT CLIENT SECRET HERE]]",
+          "redirect_uris": [],
+          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+          "token_uri": "https://accounts.google.com/o/oauth2/token"
+        }
+      }
                     
 
 ## Test: Upload one video
@@ -81,13 +81,14 @@ In `upload_video.py`, edit this line to include the absolute path to `client_sec
 
 (This seems to avoid a weird error about not being able to find the json file.)
 
+Then edit and run `upload-to-youtube-api-test.py`, which just does this:
 
-        python upload_video.py --file="/tmp/test_video_file.flv"   # <----- your video file here
-                               --title="Summer vacation in California"
-                               --description="Had fun surfing in Santa Cruz"
-                               --keywords="surfing,Santa Cruz"
-                               --category="22"
-                               --privacyStatus="private"
+    python upload_video.py --file="/tmp/test_video_file.flv"   # <----- your video file here
+                           --title="Summer vacation in California"
+                           --description="Had fun surfing in Santa Cruz"
+                           --keywords="surfing,Santa Cruz"
+                           --category="22"
+                           --privacyStatus="private"
 
 
 **Note**: Use absolute paths for the video.
@@ -113,10 +114,11 @@ The file `upload_video-many.py` is mostly the same as `upload_video.py`, except 
 
 Each line represents a video that may or may not be uploaded. 
 
-
+- The program `seminar-csv-parse.py` is a test program that reads through the CSV file and makes a Title and Description for each line. I pasted its code into `upload_video-many.py` afterward.
 - If 'Video URL' is present, the line is skipped (presumably the video has been already uploaded during a previous run).
-  - See the code for other conditions that skip the line.
-- The 'Talk Video' field is the name of the video. Its absolute path is hard-coded in the code, you'll need to change that. 
+  - See the code for other conditions that skip the line, you'll probably want to modify it for your own application.
+- The 'Talk Video' field is the name of the video. Its absolute path is hard-coded in the code, you'll need to change this line:
+  - `absfile = os.path.join('/media/justin/ccdc_vid_backup/videos_seminars/',file)`
 
 
 
@@ -125,10 +127,11 @@ Each line represents a video that may or may not be uploaded.
 
 ### Error: redirect_uri_mismatch
 
-The redirect URI in the request, http://localhost:8080/, does not match the ones authorized for the OAuth client. Visit https://console.developers.google.com/apis/credentials/oauthclient/blahblahblah to update the authorized redirect URIs.
+"The redirect URI in the request, http://localhost:8080/, does not match the ones authorized for the OAuth client. Visit https://console.developers.google.com/apis/credentials/oauthclient/blahblahblah to update the authorized redirect URIs."
 
 - Went to <https://developers.google.com/identity/protocols/OpenIDConnect#setredirecturi>.
 - Added "http://localhost:8080/" to 'redirect url' in some google api page.
+- I see `client_secrets.json` has the line `"redirect_uris": []`, maybe I should've filled it in?
 
 
 ### Error: "UserWarning: Cannot access oauth2.json: No such file or directory"
@@ -147,7 +150,7 @@ Edited upload_video.py : Used absolute path to CLIENT_SECRET. Worked.
 
 ### Error: Cannot access ./upload_video-many.py-oauth2.json: No such file or directory
 
-- Copied the `oauth2.json` file from `upload_video.py`:
+- Since `upload_video.py` worked, I just copied the `oauth2.json` file from `upload_video.py`:
 
       $ cp -a upload_video.py-oauth2.json upload_video-many.py-oauth2.json
 
