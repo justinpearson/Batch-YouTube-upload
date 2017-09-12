@@ -62,15 +62,15 @@ Following the YouTube Data API tutorial "Upload a Video" (<https://developers.go
   - <https://developers.google.com/youtube/registering_an_application>
   - This results in you getting a 'client id' and 'client secret', which you should put in a file `client_secrets.json` like this:
 
-      {
-        "web": {
-          "client_id": "[[INSERT CLIENT ID HERE]]",
-          "client_secret": "[[INSERT CLIENT SECRET HERE]]",
-          "redirect_uris": [],
-          "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-          "token_uri": "https://accounts.google.com/o/oauth2/token"
+        {
+          "web": {
+            "client_id": "[[INSERT CLIENT ID HERE]]",
+            "client_secret": "[[INSERT CLIENT SECRET HERE]]",
+            "redirect_uris": [],
+            "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+            "token_uri": "https://accounts.google.com/o/oauth2/token"
+          }
         }
-      }
                     
 
 ## Test: Upload one video
